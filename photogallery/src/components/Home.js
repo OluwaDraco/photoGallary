@@ -1,9 +1,11 @@
 import React from "react";
+import Header from "./Header";
 
-const Home = () =>{
+const Home = (props) =>{
     return(
-        <h2>Welcome! you can start your search by piking anyone above !</h2>
+        <h2>welcome</h2>
     )
+        
 }
 
 export default Home;

@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 
-import Nav from "./components/Nav";
-import SearchForm from "./components/SearchForm";
 import PhotoList from "./components/PhotoList";
+import Home from "./components/Home"
 import key from "./config/Config";
+import Header from "./components/Header";
 
 export default class App extends Component {
     state = {
@@ -34,15 +34,17 @@ export default class App extends Component {
 
     render() {
         return (
-            <div className="container">
-            <Nav />
-            <SearchForm onSearch={this.querySearch} />
-            <BrowserRouter>
+         <div className="container">
+         <Router>
+            
+            <Header  onSearch={this.querySearch}/>
+            
             <Routes>
-            <Route path="/" element={ <PhotoList data={this.state.pictures} key={this.state.pictures.id}/>} />
+            <Route path="/" render={()=><Home />} />
+            <Route path="/:query" element={ <PhotoList data={this.state.pictures} key={this.state.pictures.id}/>} />
             </Routes>
-            </BrowserRouter>
+            </Router>
         </div>
-        );
+        )
     }
 }
