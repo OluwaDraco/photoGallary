@@ -11,18 +11,19 @@ import Header from "./components/Header";
 export default class App extends Component {
     state = {
         pictures: [],
+        query: "pokemon"
     };
 
     componentDidMount() {
-        this.querySearch();
+        this.querySearch(window.location.pathname);
     }
-    querySearch = async (query="cats") => {
+    querySearch = async (query) => {
         await axios
             .get(
                 `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=${query}&per_page=24&page=1&format=json&nojsoncallback=1`
             )
             .then((responseData) =>
-                this.setState({ pictures: responseData.data.photos.photo })
+                this.setState({ pictures: responseData.data.photos.photo,query:query })
             )
             .catch((error) => {
                 console.error(
@@ -37,10 +38,10 @@ export default class App extends Component {
          <div className="container">
          <Router>
             
-            <Header  onSearch={this.querySearch}/>
+            <Header  onSearch={()=>this.querySearch(window.location.pathname)} query={this.state.query} />
             
             <Routes>
-            <Route path="/" render={()=><Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="/:query" element={ <PhotoList data={this.state.pictures} key={this.state.pictures.id}/>} />
             </Routes>
             </Router>

@@ -1,6 +1,11 @@
-import React from "react";
+import React,{Component} from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default class SearchForm extends React.Component {
+function withNavigation(Component) {
+    return (props) => <Component {...props} location={useLocation()} navigate={useNavigate()} />;
+  }
+
+class SearchForm extends Component {
 
     state={
         searchText: ''
@@ -11,9 +16,16 @@ export default class SearchForm extends React.Component {
     }
 
     handleSubmit = e=>{
+        this.props.navigate(`/${this.query.value}`)
         e.preventDefault();
         this.props.onSearch(this.query.value);
         e.currentTarget.reset();
+    }
+
+    componentDidUpdate(prevProps){
+        if(prevProps.location.pathname !== this.props.location.pathname){
+            this.props.onSearch(this.props.location.pathname);
+        }
     }
 
     
@@ -44,3 +56,5 @@ export default class SearchForm extends React.Component {
         );
     }
 }
+
+export default withNavigation(SearchForm);
